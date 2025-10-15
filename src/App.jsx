@@ -1,33 +1,49 @@
-import React, { useState, useEffect } from "react";
-import "./WindowWidthTracker.css"; 
+import { useEffect, useState } from "react";
+import "./box.css";
 
-function WindowWidthTracker() {
-  const [width, setWidth] = useState(window.innerWidth);
-  const [height, setHeight] = useState(window.innerHeight);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWidth(window.innerWidth);
-      setHeight(window.innerHeight);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
+function Color({ onClick, col }) {
   return (
-    <div className="tracker-container">
-      <div className="tracker-card">
-        <h1>📏 Window Dimensions</h1>
-        <p>
-          <strong>Width:</strong> {width}px
-        </p>
-        <p>
-          <strong>Height:</strong> {height}px
-        </p>
-      </div>
-    </div>
+    <>
+      {col.map((color) => {
+        return (
+          <button key={color} onClick={() => onClick(color)}>
+            {color.toUpperCase()}
+          </button>
+        );
+      })}
+      <br />
+      <button onClick={() => onClick("yellow")}>RESET</button>
+    </>
   );
 }
 
-export default WindowWidthTracker;
+function App() {
+  const [color, setColor] = useState("yellow");
+  const [isRuning, setIsRunning] = useState(false);
+  const colors = ["red", "blue", "green", "yellow", "pink", "orange"];
+
+  const handleClick = (e) => {
+    setColor(e);
+  };
+
+  useEffect(() => {
+    if (!isRuning) return;
+    const interval = setInterval(() => {
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      setColor(randomColor);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isRuning]);
+
+  return (
+    <>
+      <div className={`box ${color}`}>{color}</div>
+      <Color onClick={handleClick} col={colors} />
+      <br />
+      <button onClick={() => setIsRunning(true)}>START</button>
+      <button onClick={() => setIsRunning(false)}>STOP</button>
+    </>
+  );
+}
+export default App;
