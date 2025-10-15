@@ -42,8 +42,6 @@ npm install
 ```
 npm start
 ```
-🎨 Screenshots
-<div align="center"> <img src="screenshot1.png" width="300" /></div>
 ✨ Author
 
 Gihan Kesara
